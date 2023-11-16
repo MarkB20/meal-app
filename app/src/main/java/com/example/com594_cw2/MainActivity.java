@@ -9,6 +9,8 @@ import android.view.View;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
+
 public class MainActivity extends AppCompatActivity {
     public static final String json_string = "{\"Meal\":\"Sweet and Sour Pork\", \"DrinkAlternate\":null, \"Category\":\"Pork\", " +
             "\"Area\":\"Chinese\", \"MealThumb\":\"https:\\/\\/www.themealdb.com\\/images\\/media\\/meals\\/1529442316.jpg\"}";
@@ -22,13 +24,20 @@ public class MainActivity extends AppCompatActivity {
     String area = "";
     String mealthumb = "";
 
+    DataBaseAdapter dataBaseAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // room database
         mealDatabase = MealDatabase.getMealDatabase(getApplicationContext());
         mealDao = mealDatabase.mealDao();
+
+
+        // SQLite database for "Add Meals to DB"
+        dataBaseAdapter = new DataBaseAdapter(this);
+        dataBaseAdapter = dataBaseAdapter.open();
 
         JSONObject jObj = null;
         try {
@@ -49,6 +58,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+    public void addMeals(View view){
+        //TODO add meals and remove str1 and str2
+        String str1 = "Username";
+        String str2 = "Password";
+        dataBaseAdapter.insertEntry(str1, str2);
+
+
+    }
+
 
     public void storeData(View view){
         MealEntity mealEntity = new MealEntity();
