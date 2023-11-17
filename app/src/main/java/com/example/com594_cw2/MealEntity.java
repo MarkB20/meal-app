@@ -4,6 +4,9 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity(tableName = "table_meal")
 public class MealEntity {
     @PrimaryKey(autoGenerate = true) Integer mealID;
@@ -12,6 +15,72 @@ public class MealEntity {
     @ColumnInfo(name = "Category") String category;
     @ColumnInfo(name = "Area") String area;
     @ColumnInfo(name = "MealThumb") String mealThumb;
+
+    @ColumnInfo(name = "Tags") String tags ;
+    @ColumnInfo(name = "Youtube") String youtube;
+    @ColumnInfo(name = "Ingredient") private List<String> ingredient;
+
+    @ColumnInfo(name = "Measure") private List<String> measure;
+    @ColumnInfo(name = "Source") String source ;
+    @ColumnInfo(name = "ImageSource") String imageSource ;
+    @ColumnInfo(name = "CreativeCommonsConfirmed") String creativeCommonsConfirmed  ;
+    @ColumnInfo(name = "DateModified") String dateModified ;
+
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+
+    public void setYoutube(String youtube) {
+        this.youtube = youtube;
+    }
+
+    public void setMeasure(List<String> measure) {
+        this.measure = measure;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public void setImageSource(String imageSource) {
+        this.imageSource = imageSource;
+    }
+
+    public void setCreativeCommonsConfirmed(String creativeCommonsConfirmed) {
+        this.creativeCommonsConfirmed = creativeCommonsConfirmed;
+    }
+
+    public void setDateModified(String dateModified) {
+        this.dateModified = dateModified;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public String getYoutube() {
+        return youtube;
+    }
+
+    public List<String> getMeasure() {
+        return measure;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public String getImageSource() {
+        return imageSource;
+    }
+
+    public String getCreativeCommonsConfirmed() {
+        return creativeCommonsConfirmed;
+    }
+
+    public String getDateModified() {
+        return dateModified;
+    }
 
     public String getdAlternate() {
         return dAlternate;
@@ -59,5 +128,13 @@ public class MealEntity {
 
     public void setMeal(String meal) {
         this.meal = meal;
+    }
+
+    public List<String> getIngredient() {
+        return ingredient;
+    }
+
+    public void setIngredient(List<String> ingredient) {
+        this.ingredient = ingredient;
     }
 }
