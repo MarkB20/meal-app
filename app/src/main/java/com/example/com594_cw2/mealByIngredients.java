@@ -6,6 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -21,6 +24,12 @@ public class mealByIngredients extends AppCompatActivity {
     String ingredient = "chicken";
     private String url = "https://www.themealdb.com/api/json/v1/1/search.php?s=";
 
+    EditText ingredientTxt;
+
+    Button retrieveMealsBtn;
+
+    Button saveMealsBtn;
+
 
     MealDatabase mealDatabase;
     MealDao mealDao;
@@ -34,8 +43,25 @@ public class mealByIngredients extends AppCompatActivity {
         mealDatabase = MealDatabase.getMealDatabase(getApplicationContext());
         mealDao = mealDatabase.mealDao();
 
+        ingredientTxt = (EditText) findViewById(R.id.ingredientTxt);
+        retrieveMealsBtn = (Button) findViewById(R.id.retrieveMealsBtn);
+        saveMealsBtn = (Button) findViewById(R.id.saveMealsBtn);
 
-            getData();
+
+
+
+
+            retrieveMealsBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(ingredientTxt.getText().length() == 0){
+                        Toast.makeText(getApplicationContext(), "Enter something in the text box", Toast.LENGTH_LONG).show();//display the response on screen
+
+                    }else{
+                        getData();
+                    }
+                }
+            });
     }
 
     private void getData() {
@@ -43,7 +69,7 @@ public class mealByIngredients extends AppCompatActivity {
         mRequestQueue = Volley.newRequestQueue(this);
 
         // String Request initialized
-        mStringRequest = new StringRequest(Request.Method.GET, url + ingredient, new Response.Listener<String>() {
+        mStringRequest = new StringRequest(Request.Method.GET, url + ingredientTxt.getText(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 System.out.println(response.toString());
