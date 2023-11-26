@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Converters {
@@ -19,8 +20,9 @@ public class Converters {
 
     @TypeConverter
     public static String fromList(List<String> list) {
+        List<String> copy = new ArrayList<>(list);
         Gson gson = new Gson();
-        return gson.toJson(list);
+        return gson.toJson(copy);
 
     }
 
