@@ -17,7 +17,7 @@ public class JSONhelper {
     public void stringToRoom(String json_string, MealDao mealDao){
 
 
-        //TODO sort out JSON array
+
         String Meal;
         String DrinkAlternate;
         String Category;
@@ -153,7 +153,7 @@ public class JSONhelper {
                         System.out.println(mealEntity.area);
                         System.out.println(mealEntity.mealThumb);
                         System.out.println(mealEntity.getIngredient());
-                        System.out.println(mealEntity.getMeasure());
+//                        System.out.println(mealEntity.getMeasure());
                         System.out.println(mealEntity.getSource());
                         System.out.println(mealEntity.getCreativeCommonsConfirmed());
                         System.out.println(mealEntity.getDateModified());

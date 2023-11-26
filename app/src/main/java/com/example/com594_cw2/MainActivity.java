@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
 
         //sends the string to be conversed into a json object so be stored in a database
         jsoNhelper.stringToRoom(getResources().getString(R.string.json1), mealDao);
-        // jsoNhelper.stringToRoom(getResources().getString(R.string.json2), mealDao);
 
 
     }
