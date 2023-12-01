@@ -120,7 +120,7 @@ public class JSONhelper {
 
 
                 } catch (JSONException e) {
-                    System.out.println("ERROR  AT = " + i + jObj.toString());
+                    System.out.println("ERROR  AT = " + i + jObj);
                     throw new RuntimeException(e);
 
                 }
@@ -141,7 +141,7 @@ public class JSONhelper {
                 mealEntity.setCreativeCommonsConfirmed(creativeCommonsConfirmed);
                 mealEntity.setDateModified(dateModified);
 
-                System.out.println("call NO.= " + i + jObj.toString());
+                System.out.println("call NO.= " + i + jObj);
 
                 new Thread(new Runnable() {
                     @Override
@@ -153,7 +153,7 @@ public class JSONhelper {
                         System.out.println(mealEntity.area);
                         System.out.println(mealEntity.mealThumb);
                         System.out.println(mealEntity.getIngredient());
-//                        System.out.println(mealEntity.getMeasure());
+                        System.out.println(mealEntity.getMeasure());
                         System.out.println(mealEntity.getSource());
                         System.out.println(mealEntity.getCreativeCommonsConfirmed());
                         System.out.println(mealEntity.getDateModified());

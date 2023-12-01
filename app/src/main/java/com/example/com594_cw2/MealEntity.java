@@ -26,6 +26,8 @@ public class MealEntity {
     @ColumnInfo(name = "CreativeCommonsConfirmed") String creativeCommonsConfirmed  ;
     @ColumnInfo(name = "DateModified") String dateModified ;
 
+
+
     public void setTags(String tags) {
         this.tags = tags;
     }

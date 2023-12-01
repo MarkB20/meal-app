@@ -1,20 +1,11 @@
 package com.example.com594_cw2;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import androidx.appcompat.app.AppCompatActivity;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -24,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     Button mealIngredient;
+    Button mealDB;
 
 
     @Override
@@ -35,16 +27,20 @@ public class MainActivity extends AppCompatActivity {
         mealDatabase = MealDatabase.getMealDatabase(getApplicationContext());
         mealDao = mealDatabase.mealDao();
 
-        mealIngredient = (Button) findViewById(R.id.searchIngredient_btn);
+        mealIngredient = findViewById(R.id.searchIngredient_btn);
+        mealDB = findViewById(R.id.search_btn);
 
 
-        mealIngredient.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getBaseContext(), mealByIngredients.class);
+        mealIngredient.setOnClickListener(view -> {
+            Intent intent = new Intent(getBaseContext(), mealByIngredients.class);
 
-                startActivity(intent);
-            }
+            startActivity(intent);
+        });
+
+        mealDB.setOnClickListener(view -> {
+            Intent intent = new Intent(getBaseContext(), SearchMeals.class);
+
+            startActivity(intent);
         });
 
 
@@ -58,22 +54,6 @@ public class MainActivity extends AppCompatActivity {
         jsoNhelper.stringToRoom(getResources().getString(R.string.json1), mealDao);
 
 
-    }
-
-    public void getData(View view){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                MealEntity mealEntity = mealDao.retrieveMeal("Chinese");
-                if (mealEntity == null){
-                    System.out.println("Sorry");
-                }
-                else{
-                    String meal_name = mealEntity.meal;
-                    System.out.println("Meal name = "+ meal_name);
-                }
-            }
-        }).start();
     }
 
 }
