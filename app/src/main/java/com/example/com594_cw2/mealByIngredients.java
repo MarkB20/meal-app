@@ -71,7 +71,7 @@ public class mealByIngredients extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_meal_by_ingredients);
+        setContentView(R.layout.activity_meal_by_ingredients1);
 
         mealDatabase = MealDatabase.getMealDatabase(getApplicationContext());
         mealDao = mealDatabase.mealDao();
