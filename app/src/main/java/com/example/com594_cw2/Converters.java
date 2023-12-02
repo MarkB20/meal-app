@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Converters {
 
-    // convert class that allows the use of arrays
+    // convert class that allows the use of lists
     @TypeConverter
     public static List<String> fromString(String value) {
         Type listType = new TypeToken<List<String>>() {}.getType();
@@ -26,19 +26,6 @@ public class Converters {
 
     }
 
-    //allows the use of arrays in the database
-    @TypeConverter
-    public static String fromStringArray(String[] array) {
-        StringBuilder result = new StringBuilder();
-        for (String item : array) {
-            result.append(item).append(",");
-        }
-        return result.toString();
-    }
 
-    @TypeConverter
-    public static String[] toStringArray(String value) {
-        return value.split(",");
-    }
 
 }

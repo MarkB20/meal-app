@@ -64,7 +64,7 @@ public class mealByIngredients extends AppCompatActivity {
 
     MealDatabase mealDatabase;
     MealDao mealDao;
-    JSONhelper jsoNhelper = new JSONhelper();
+    JSONHelper jsoNhelper = new JSONHelper();
     JSONObject obj = null;
     JSONArray jArray = null;
 

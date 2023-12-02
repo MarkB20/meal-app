@@ -4,27 +4,26 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity(tableName = "table_meal")
 public class MealEntity {
-    @PrimaryKey(autoGenerate = true) Integer mealID;
-    @ColumnInfo(name = "Meal") String meal;
-    @ColumnInfo(name = "DrinkAlternate") String dAlternate;
-    @ColumnInfo(name = "Category") String category;
-    @ColumnInfo(name = "Area") String area;
-    @ColumnInfo(name = "MealThumb") String mealThumb;
+    @PrimaryKey(autoGenerate = true) private Integer mealID;
+    @ColumnInfo(name = "Meal") private String meal;
+    @ColumnInfo(name = "DrinkAlternate") private String dAlternate;
+    @ColumnInfo(name = "Category") private String category;
+    @ColumnInfo(name = "Area") private String area;
+    @ColumnInfo(name = "MealThumb") private String mealThumb;
 
-    @ColumnInfo(name = "Tags") String tags ;
-    @ColumnInfo(name = "Youtube") String youtube;
+    @ColumnInfo(name = "Tags") private String tags ;
+    @ColumnInfo(name = "Youtube") private String youtube;
     @ColumnInfo(name = "Ingredient") private List<String> ingredient;
 
     @ColumnInfo(name = "Measure") private List<String> measure;
-    @ColumnInfo(name = "Source") String source ;
-    @ColumnInfo(name = "ImageSource") String imageSource ;
-    @ColumnInfo(name = "CreativeCommonsConfirmed") String creativeCommonsConfirmed  ;
-    @ColumnInfo(name = "DateModified") String dateModified ;
+    @ColumnInfo(name = "Source") private String source ;
+    @ColumnInfo(name = "ImageSource") private String imageSource ;
+    @ColumnInfo(name = "CreativeCommonsConfirmed") private String creativeCommonsConfirmed  ;
+    @ColumnInfo(name = "DateModified") private String dateModified ;
 
 
 
@@ -84,11 +83,11 @@ public class MealEntity {
         return dateModified;
     }
 
-    public String getdAlternate() {
+    public String getDAlternate() {
         return dAlternate;
     }
 
-    public void setdAlternate(String dAlternate) {
+    public void setDAlternate(String dAlternate) {
         this.dAlternate = dAlternate;
     }
 

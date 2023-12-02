@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
     MealDatabase mealDatabase;
     MealDao mealDao;
-    JSONhelper jsoNhelper = new JSONhelper();
+    JSONHelper jsoNhelper = new JSONHelper();
 
 
     Button mealIngredient;
