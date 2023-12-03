@@ -10,7 +10,7 @@
         android:id="@+id/ingredientTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="48dp"
         android:ems="10"
         android:hint="Enter Ingredient"
         android:inputType="text"
@@ -22,9 +22,10 @@
         android:id="@+id/retrieveMealsBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="Retrieve Meals"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ingredientTxt" />
 
@@ -32,7 +33,7 @@
         android:id="@+id/saveMealsBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="30dp"
         android:text="Save meals to Database"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,24 +41,20 @@
 
     <TextView
         android:id="@+id/jsonOutputTxt"
-        android:layout_width="0dp"
+        android:layout_width="403dp"
         android:layout_height="349dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/noOfResultsTxt" />
 
     <TextView
         android:id="@+id/noOfResultsTxt"
-        android:layout_width="0dp"
+        android:layout_width="85dp"
         android:layout_height="29dp"
         android:layout_marginTop="68dp"
-        android:layout_marginEnd="164dp"
         android:text="1/9"
         android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/forwardBtn"
         app:layout_constraintStart_toEndOf="@+id/backBtn"
         app:layout_constraintTop_toBottomOf="@+id/saveMealsBtn" />
 
@@ -65,23 +62,19 @@
         android:id="@+id/backBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="76dp"
-        android:layout_marginTop="297dp"
-        android:layout_marginEnd="31dp"
-        app:layout_constraintEnd_toStartOf="@+id/noOfResultsTxt"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_media_previous" />
+        android:layout_marginBottom="38dp"
+        app:layout_constraintBottom_toTopOf="@+id/jsonOutputTxt"
+        app:srcCompat="@android:drawable/ic_media_previous"
+        tools:layout_editor_absoluteX="76dp" />
 
     <ImageButton
         android:id="@+id/forwardBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="297dp"
-        android:layout_marginEnd="45dp"
+        android:layout_marginEnd="76dp"
+        android:layout_marginBottom="36dp"
+        app:layout_constraintBottom_toTopOf="@+id/jsonOutputTxt"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/noOfResultsTxt"
-        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_media_next" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

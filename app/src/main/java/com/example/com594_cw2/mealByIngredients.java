@@ -64,14 +64,14 @@ public class mealByIngredients extends AppCompatActivity {
 
     MealDatabase mealDatabase;
     MealDao mealDao;
-    JSONhelper jsoNhelper = new JSONhelper();
+    JSONHelper jsoNhelper = new JSONHelper();
     JSONObject obj = null;
     JSONArray jArray = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_meal_by_ingredients);
+        setContentView(R.layout.activity_meal_by_ingredients1);
 
         mealDatabase = MealDatabase.getMealDatabase(getApplicationContext());
         mealDao = mealDatabase.mealDao();

@@ -1,6 +1,7 @@
 package com.example.com594_cw2;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
     MealDatabase mealDatabase;
     MealDao mealDao;
-    JSONhelper jsoNhelper = new JSONhelper();
+    JSONHelper jsoNhelper = new JSONHelper();
 
 
     Button mealIngredient;
@@ -21,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main1);
 
         // room database
         mealDatabase = MealDatabase.getMealDatabase(getApplicationContext());
@@ -54,6 +55,20 @@ public class MainActivity extends AppCompatActivity {
         jsoNhelper.stringToRoom(getResources().getString(R.string.json1), mealDao);
 
 
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
+        {
+            setContentView(R.layout.activity_main1);
+        }
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
+        {
+            setContentView(R.layout.activity_main2);
+        }
     }
 
 }

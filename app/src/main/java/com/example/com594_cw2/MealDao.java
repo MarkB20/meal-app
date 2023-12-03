@@ -1,6 +1,5 @@
 package com.example.com594_cw2;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -15,6 +14,4 @@ public interface MealDao {
             "   OR LOWER(Ingredient) LIKE '%' || LOWER(:searchKeyword) || '%';")
     List<MealEntity> retrieveMeal(String searchKeyword);
 
-    @Query("SELECT * from table_meal ORDER By Meal Asc")
-    LiveData<List<MealEntity>> getMeals();
 }

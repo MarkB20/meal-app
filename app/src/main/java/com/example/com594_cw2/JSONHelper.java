@@ -1,19 +1,14 @@
 package com.example.com594_cw2;
 
-import android.content.Context;
-import android.util.Log;
-import android.widget.Button;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class JSONhelper {
+public class JSONHelper {
 
-    //MealDao mealDao;
-   // MealDatabase mealDatabase;
+
     public void stringToRoom(String json_string, MealDao mealDao){
 
 
@@ -33,24 +28,24 @@ public class JSONhelper {
         String DateModified;
 
 
-        String mealName = "";
-        String drinkAlternate = "";
-        String category = "";
-        String area = "";
-        String mealthumb = "";
-        String tag = "";
-        String youtube  = "";
-        ArrayList<String> ingredients = new ArrayList<String>();
-        ArrayList<String> measures = new ArrayList<String>();
+        String mealName;
+        String drinkAlternate;
+        String category;
+        String area;
+        String mealThumbs;
+        String tag;
+        String youtube;
+        ArrayList<String> ingredients;
+        ArrayList<String> measures;
 
-        String source = "";
-        String imageSource = "";
-        String creativeCommonsConfirmed = "";
-        String dateModified = "";
+        String source;
+        String imageSource;
+        String creativeCommonsConfirmed;
+        String dateModified;
 
 
-        JSONObject jObj = null;
-        JSONArray jArray = null;
+        JSONObject jObj;
+        JSONArray jArray;
         try {
             JSONObject jObjInitializer = new JSONObject(json_string);
             jArray = jObjInitializer.getJSONArray("meals");
@@ -59,13 +54,11 @@ public class JSONhelper {
             for (int i = 0; i < jArray.length(); i++) {
                 jObj = jArray.getJSONObject(i);
 
+                ingredients = new ArrayList<>();
+                measures = new ArrayList<>();
+
+
                 try {
-
-                    //jObjInitializer = new JSONObject(json_string);
-                    //JSONArray jArray = jObjInitializer.getJSONArray("meals");
-
-
-
 
                     if (jObj.has("Meal")) {
                         Meal = "Meal";
@@ -80,7 +73,6 @@ public class JSONhelper {
                         Source = "Source";
                         ImageSource = "ImageSource";
                         CreativeCommonsConfirmed = "CreativeCommonsConfirmed";
-                        DateModified = "dateModified";
                     } else {
 
                         Meal = "strMeal";
@@ -95,14 +87,14 @@ public class JSONhelper {
                         Source = "strSource";
                         ImageSource = "strImageSource";
                         CreativeCommonsConfirmed = "strCreativeCommonsConfirmed";
-                        DateModified = "dateModified";
                     }
+                    DateModified = "dateModified";
 
                     mealName = jObj.getString(Meal);
                     drinkAlternate = jObj.getString(DrinkAlternate);
                     category = jObj.getString(Category);
                     area = jObj.getString(Area);
-                    mealthumb = jObj.getString(MealThumb);
+                    mealThumbs = jObj.getString(MealThumb);
                     tag = jObj.getString(Tags);
                     youtube = jObj.getString(Youtube);
 
@@ -128,10 +120,10 @@ public class JSONhelper {
 
                 MealEntity mealEntity = new MealEntity();
                 mealEntity.setMeal(mealName);
-                mealEntity.setdAlternate(drinkAlternate);
+                mealEntity.setDAlternate(drinkAlternate);
                 mealEntity.setCategory(category);
                 mealEntity.setArea(area);
-                mealEntity.setMealThumb(mealthumb);
+                mealEntity.setMealThumb(mealThumbs);
                 mealEntity.setTags(tag);
                 mealEntity.setYoutube(youtube);
                 mealEntity.setIngredient(ingredients);
@@ -143,22 +135,20 @@ public class JSONhelper {
 
                 System.out.println("call NO.= " + i + jObj);
 
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mealDao.storeMeal(mealEntity);
-                        System.out.println(mealEntity.meal);
-                        System.out.println(mealEntity.dAlternate);
-                        System.out.println(mealEntity.category);
-                        System.out.println(mealEntity.area);
-                        System.out.println(mealEntity.mealThumb);
-                        System.out.println(mealEntity.getIngredient());
-                        System.out.println(mealEntity.getMeasure());
-                        System.out.println(mealEntity.getSource());
-                        System.out.println(mealEntity.getCreativeCommonsConfirmed());
-                        System.out.println(mealEntity.getDateModified());
-                    }
+                new Thread(() -> {
+                    mealDao.storeMeal(mealEntity);
+                    System.out.println(mealEntity.getMeal());
+                    System.out.println(mealEntity.getDAlternate());
+                    System.out.println(mealEntity.getCategory());
+                    System.out.println(mealEntity.getArea());
+                    System.out.println(mealEntity.getMealThumb());
+                    System.out.println(mealEntity.getIngredient());
+                    System.out.println(mealEntity.getMeasure());
+                    System.out.println(mealEntity.getSource());
+                    System.out.println(mealEntity.getCreativeCommonsConfirmed());
+                    System.out.println(mealEntity.getDateModified());
                 }).start();
+
             }
 
         } catch (JSONException e) {
