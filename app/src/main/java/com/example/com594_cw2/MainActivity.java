@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 
@@ -22,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main1);
+        setContentView(R.layout.activity_main);
 
         // room database
         mealDatabase = MealDatabase.getMealDatabase(getApplicationContext());
@@ -47,6 +48,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Handle configuration changes, if needed
+    }
+
 
 
     public void storeData(View view){
@@ -57,18 +63,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
 
-        if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
-        {
-            setContentView(R.layout.activity_main1);
-        }
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
-        {
-            setContentView(R.layout.activity_main2);
-        }
-    }
 
 }
