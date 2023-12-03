@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.InputStream;
@@ -40,7 +41,7 @@ public class SearchMeals extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_meals1);
+        setContentView(R.layout.activity_search_meals);
 
         mealDatabase = MealDatabase.getMealDatabase(getApplicationContext());
         mealDao = mealDatabase.mealDao();
@@ -128,6 +129,52 @@ public class SearchMeals extends AppCompatActivity {
 
     }
 
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Handle configuration changes, if needed
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("indent", indent);
+        outState.putStringArray("mealTxt",  mealTxt);
+        outState.putStringArray("ingredientTxt", ingredientTxt);
+        outState.putStringArray("URLTxt", URLTxt);
+
+
+    }
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+         indent = savedInstanceState.getInt("indent", 0);
+         mealTxt= savedInstanceState.getStringArray("mealTxt");
+         ingredientTxt= savedInstanceState.getStringArray("ingredientTxt");
+         URLTxt= savedInstanceState.getStringArray("URLTxt");
+
+
+
+
+        if (mealTxt != null && ingredientTxt != null && URLTxt != null && mealTxt.length > 0) {
+            if (!mealTxt[indent].isEmpty()) {
+                cycle();
+            }
+        } else {
+            // Handle the case where one or more arrays are null or empty
+            // You might want to display a message or handle it in a way that makes sense for your app
+        }
+
+
+    }
+
+
+
+
+
+
+
+
     private void cycle() {
 
         runOnUiThread(() -> {
@@ -174,31 +221,9 @@ public class SearchMeals extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-    }
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
 
 
-    }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
-        {
-            setContentView(R.layout.activity_search_meals1);
-        }
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
-        {
-            setContentView(R.layout.activity_search_meals2);
-        }
-    }
 
 }
 
