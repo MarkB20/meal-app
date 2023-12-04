@@ -3,6 +3,7 @@ package com.example.com594_cw2;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -35,8 +36,9 @@ public class MainActivity extends AppCompatActivity {
 
         mealIngredient.setOnClickListener(view -> {
             Intent intent = new Intent(getBaseContext(), mealByIngredients.class);
-
+            Log.d("MainActivity", "Button clicked, starting mealByIngredients activity");
             startActivity(intent);
+
         });
 
         mealDB.setOnClickListener(view -> {
