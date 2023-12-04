@@ -20,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     Button mealIngredient;
     Button mealDB;
 
+    Button webSearch;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         mealIngredient = findViewById(R.id.searchIngredient_btn);
         mealDB = findViewById(R.id.search_btn);
+        webSearch = findViewById(R.id.webSearch_btn);
 
 
         mealIngredient.setOnClickListener(view -> {
@@ -41,10 +44,19 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+
+
         mealDB.setOnClickListener(view -> {
             Intent intent = new Intent(getBaseContext(), SearchMeals.class);
 
             startActivity(intent);
+        });
+
+        webSearch.setOnClickListener(view -> {
+            Intent intent = new Intent(getBaseContext(), SearchAll.class);
+
+            startActivity(intent);
+
         });
 
 

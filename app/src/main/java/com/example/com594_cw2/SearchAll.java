@@ -1,9 +1,8 @@
 package com.example.com594_cw2;
 
-
+import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.res.Configuration;
@@ -24,10 +23,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Objects;
+import java.util.Arrays;
 
-public class mealByIngredients extends AppCompatActivity {
+
+public class SearchAll extends AppCompatActivity {
+
     String mealName = "";
+    String[] mealID;
     String drinkAlternate = "";
     String category = "";
     String area = "";
@@ -47,7 +49,8 @@ public class mealByIngredients extends AppCompatActivity {
 
     int indent =0;
     String JSONResponse;
-    private final String url = "https://www.themealdb.com/api/json/v1/1/search.php?s=";
+    private final String urlIngredient = "https://www.themealdb.com/api/json/v1/1/filter.php?i=";
+    private final String urlID =         "https://www.themealdb.com/api/json/v1/1/lookup.php?i=";
 
     EditText ingredientTxt;
 
@@ -71,17 +74,17 @@ public class mealByIngredients extends AppCompatActivity {
     JSONObject obj = null;
     JSONArray jArray = null;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_meal_by_ingredients);
+        setContentView(R.layout.activity_search_all);
 
         mealDatabase = MealDatabase.getMealDatabase(getApplicationContext());
         mealDao = mealDatabase.mealDao();
 
         ingredientTxt = findViewById(R.id.ingredientTxt);
         retrieveMealsBtn = findViewById(R.id.retrieveMealsBtn);
-        saveMealsBtn = findViewById(R.id.saveMealsBtn);
         jsonOutputTxt = findViewById(R.id.jsonOutputTxt);
         backBtn = findViewById(R.id.backBtn);
         forwardBtn = findViewById(R.id.forwardBtn);
@@ -89,54 +92,55 @@ public class mealByIngredients extends AppCompatActivity {
 
 
 
-            backBtn.setOnClickListener(view -> {
-                if(jArray == null){
-                    Toast.makeText(getApplicationContext(), "retrieve something first", Toast.LENGTH_LONG).show();//display instructions
-                }else{
-                    if(indent == 0){
-                        indent = jArray.length() - 1;
+        backBtn.setOnClickListener(view -> {
+            if(jArray == null){
+                Toast.makeText(getApplicationContext(), "retrieve something first", Toast.LENGTH_LONG).show();//display instructions
+            }else{
+                if(indent == 0){
+                    indent = jArray.length() - 1;
 
-                    }else{
-                        indent--;
-                    }
-                    cycle();
+                }else{
+                    indent--;
                 }
-            });
+                getIDs();
+            }
+        });
 
-            forwardBtn.setOnClickListener(view -> {
-                if(jArray == null){
-                    Toast.makeText(getApplicationContext(), "retrieve something first", Toast.LENGTH_LONG).show();//display instructions
-                }else{
-                    if(indent == jArray.length() -1){
-                        indent = 0;
-
-                    }else{
-                        indent ++;
-                    }
-                    cycle();
-                }
-            });
-
-
-
-            retrieveMealsBtn.setOnClickListener(view -> {
-                if(ingredientTxt.getText().length() == 0){
-                    Toast.makeText(getApplicationContext(), "Enter something in the text box", Toast.LENGTH_LONG).show();//display instructions
-
-                }else{
+        forwardBtn.setOnClickListener(view -> {
+            if(jArray == null){
+                Toast.makeText(getApplicationContext(), "retrieve something first", Toast.LENGTH_LONG).show();//display instructions
+            }else{
+                if(indent == jArray.length() -1){
                     indent = 0;
-                    callVolley(url + ingredientTxt.getText() );
-                }
-            });
 
-            saveMealsBtn.setOnClickListener(view -> {
-                if(JSONResponse.isEmpty()){
-                    Toast.makeText(getApplicationContext(), "retrieve something first", Toast.LENGTH_LONG).show();//display instructions
                 }else{
-                    jsoNhelper.stringToRoom(JSONResponse,mealDao);
-
+                    indent ++;
                 }
-            });
+                getIDs();
+            }
+        });
+
+
+
+        retrieveMealsBtn.setOnClickListener(view -> {
+            if(ingredientTxt.getText().length() == 0){
+                Toast.makeText(getApplicationContext(), "Enter something in the text box", Toast.LENGTH_LONG).show();//display instructions
+
+            }else{
+                indent = 0;
+                callVolley(urlIngredient + ingredientTxt.getText() );
+                getIDs();
+
+                for(String meal: mealID){
+
+                    callVolley(urlID + meal);
+                }
+
+
+            }
+        });
+
+
     }
 
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
@@ -173,7 +177,7 @@ public class mealByIngredients extends AppCompatActivity {
 
         if (jArray != null) {
 
-                cycle();
+            getIDs();
 
         } else {
             // Handle the case where one or more arrays are null or empty
@@ -184,42 +188,19 @@ public class mealByIngredients extends AppCompatActivity {
     }
 
     @SuppressLint("SetTextI18n")
-    public void cycle(){
+    public void getIDs(){
         JSONObject jObj;
         try {
-            ingredients.clear();
-            measures.clear();
-            jObj = jArray.getJSONObject(indent);
-            mealName = jObj.getString("strMeal");
-            drinkAlternate = jObj.getString("strDrinkAlternate");
-            category = jObj.getString("strCategory");
-            area = jObj.getString("strArea");
-            mealThumb = jObj.getString("strMealThumb");
-            tag = jObj.getString("strTags");
-            youtube = jObj.getString("strYoutube");
 
-            for (int x = 1; x <= 20; x++) {
-                ingredients.add(jObj.getString("strIngredient" + (x)));
+            mealID = new String[jArray.length()];
+            for(int i = 0; i < jArray.length(); i++){
+                jObj = jArray.getJSONObject(i);
+                mealID[i] = jObj.getString("idMeal");
             }
-
-            for (int x = 1; x <= 20; x++) {
-                measures.add(jObj.getString("strMeasure" + (x)));
-            }
-            source = jObj.getString("strSource");
-            imageSource = jObj.getString("strImageSource");
-            creativeCommonsConfirmed = jObj.getString("strCreativeCommonsConfirmed");
-            dateModified = jObj.getString("dateModified");
-            jsonOutputTxt.setText(
-                    "mealName: " + mealName + "\n" +
-                            "Category: " + category +  "\n" +
-                            "area: " + area +  "\n" +
-                            formatIngredients(ingredients.toString()) +  "\n");
-            noOfResultsTxt.setText(indent +1 +"/"+ jArray.length());
+            System.out.println(Arrays.toString(mealID));
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-
-
 
     }
 
@@ -229,29 +210,18 @@ public class mealByIngredients extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, newURL,
                 response -> {
                     JSONResponse = response;
-                    if(!Objects.equals(response, "{\"meals\":null}")){
-                        try {
-                            obj = new JSONObject(response);
-                            System.out.println(obj);
-                            jArray = obj.getJSONArray("meals");
-                            cycle();
+                    try {
+                        obj = new JSONObject(response);
+                        System.out.println(obj);
+                        jArray = obj.getJSONArray("meals");
 
-
-
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
-                        }
-
-
-                    }else{
-                        Toast.makeText(getApplicationContext(), "nothing matching", Toast.LENGTH_LONG).show();//display instructions
-
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
                     }
-
 
                 }, error -> {
 
-                });
+        });
         queue.add(stringRequest);
     }
 
@@ -275,5 +245,6 @@ public class mealByIngredients extends AppCompatActivity {
             return "N/A";
         }
     }
+
 
 }
