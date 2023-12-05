@@ -3,6 +3,8 @@ package com.example.com594_cw2;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -34,6 +36,55 @@ public class MainActivityTest {
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
+
+    @Test
+    public void mainActivityTestAddToDB() {
+        ViewInteraction materialButton = onView(
+                allOf(withId(R.id.add_btn), withText("Add Meals to  DB"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                1),
+                        isDisplayed()));
+        materialButton.perform(click());
+
+        ViewInteraction materialButton2 = onView(
+                allOf(withId(R.id.search_btn), withText("Search for Meals"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                3),
+                        isDisplayed()));
+        materialButton2.perform(click());
+
+        ViewInteraction appCompatEditText = onView(
+                allOf(withId(R.id.mealEdt),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                3),
+                        isDisplayed()));
+        appCompatEditText.perform(replaceText("chicken"), closeSoftKeyboard());
+
+        ViewInteraction materialButton3 = onView(
+                allOf(withId(R.id.searchBtn), withText("Search"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                4),
+                        isDisplayed()));
+        materialButton3.perform(click());
+
+        ViewInteraction textView = onView(
+                allOf(withId(R.id.mealOutput), withText("Meal: Chicken Marengo\nIngredients:\n- Olive Oil\n- Mushrooms\n- Chicken Legs\n- Passata\n- Chicken Stock Cube\n- Black Olives\n- Parsley\n"),
+                        withParent(withParent(withId(android.R.id.content))),
+                        isDisplayed()));
+        textView.check(matches(withText("Meal: Chicken Marengo\nIngredients:\n- Olive Oil\n- Mushrooms\n- Chicken Legs\n- Passata\n- Chicken Stock Cube\n- Black Olives\n- Parsley\n")));
+    }
 
     @Test
     public void mainActivityTestIngredients() {
@@ -131,6 +182,25 @@ public class MainActivityTest {
     }
 
     private static Matcher<View> childAtPositionWebSearch(
+            final Matcher<View> parentMatcher, final int position) {
+
+        return new TypeSafeMatcher<View>() {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Child at position " + position + " in parent ");
+                parentMatcher.describeTo(description);
+            }
+
+            @Override
+            public boolean matchesSafely(View view) {
+                ViewParent parent = view.getParent();
+                return parent instanceof ViewGroup && parentMatcher.matches(parent)
+                        && view.equals(((ViewGroup) parent).getChildAt(position));
+            }
+        };
+    }
+
+    private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
 
         return new TypeSafeMatcher<View>() {
