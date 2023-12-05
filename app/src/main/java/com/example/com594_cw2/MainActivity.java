@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+       System.out.println(jsoNhelper.callVolley("https://www.themealdb.com/api/json/v1/1/search.php?s=chicken", getApplicationContext()));
 
     }
 

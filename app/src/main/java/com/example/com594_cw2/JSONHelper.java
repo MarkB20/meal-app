@@ -1,10 +1,19 @@
 package com.example.com594_cw2;
 
+import android.content.Context;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class JSONHelper {
 
@@ -156,6 +165,20 @@ public class JSONHelper {
         }
 
 
+    }
+
+    public String callVolley(String newURL,  Context context){
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        //creating a string request
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, newURL,
+                response -> {
+
+                }, error -> {
+
+        });
+        queue.add(stringRequest);
+       return  stringRequest.toString();
     }
 
 }

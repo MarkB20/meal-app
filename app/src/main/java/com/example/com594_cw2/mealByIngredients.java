@@ -125,6 +125,10 @@ public class mealByIngredients extends AppCompatActivity {
 
                 }else{
                     indent = 0;
+//                    JSONObject obj = new JSONObject(callVolley);
+//                    System.out.println(obj);
+//
+//                    JSONArray meals = obj.getJSONArray("meals");
                     callVolley(url + ingredientTxt.getText() );
                 }
             });

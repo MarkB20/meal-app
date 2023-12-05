@@ -24,12 +24,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 
 public class SearchAll extends AppCompatActivity {
 
     String mealName = "";
-    String[] mealID;
     String drinkAlternate = "";
     String category = "";
     String area = "";
@@ -49,14 +49,12 @@ public class SearchAll extends AppCompatActivity {
 
     int indent =0;
     String JSONResponse;
-    private final String urlIngredient = "https://www.themealdb.com/api/json/v1/1/filter.php?i=";
-    private final String urlID =         "https://www.themealdb.com/api/json/v1/1/lookup.php?i=";
+    private final String url = "https://www.themealdb.com/api/json/v1/1/search.php?s=";
 
     EditText ingredientTxt;
 
     Button retrieveMealsBtn;
 
-    Button saveMealsBtn;
 
     ImageButton backBtn;
 
@@ -73,7 +71,6 @@ public class SearchAll extends AppCompatActivity {
     JSONHelper jsoNhelper = new JSONHelper();
     JSONObject obj = null;
     JSONArray jArray = null;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +99,7 @@ public class SearchAll extends AppCompatActivity {
                 }else{
                     indent--;
                 }
-                getIDs();
+                cycle();
             }
         });
 
@@ -116,7 +113,7 @@ public class SearchAll extends AppCompatActivity {
                 }else{
                     indent ++;
                 }
-                getIDs();
+                cycle();
             }
         });
 
@@ -128,18 +125,9 @@ public class SearchAll extends AppCompatActivity {
 
             }else{
                 indent = 0;
-                callVolley(urlIngredient + ingredientTxt.getText() );
-                getIDs();
-
-                for(String meal: mealID){
-
-                    callVolley(urlID + meal);
-                }
-
-
+                callVolley(url + ingredientTxt.getText() );
             }
         });
-
 
     }
 
@@ -177,7 +165,7 @@ public class SearchAll extends AppCompatActivity {
 
         if (jArray != null) {
 
-            getIDs();
+            cycle();
 
         } else {
             // Handle the case where one or more arrays are null or empty
@@ -188,19 +176,42 @@ public class SearchAll extends AppCompatActivity {
     }
 
     @SuppressLint("SetTextI18n")
-    public void getIDs(){
+    public void cycle(){
         JSONObject jObj;
         try {
+            ingredients.clear();
+            measures.clear();
+            jObj = jArray.getJSONObject(indent);
+            mealName = jObj.getString("strMeal");
+            drinkAlternate = jObj.getString("strDrinkAlternate");
+            category = jObj.getString("strCategory");
+            area = jObj.getString("strArea");
+            mealThumb = jObj.getString("strMealThumb");
+            tag = jObj.getString("strTags");
+            youtube = jObj.getString("strYoutube");
 
-            mealID = new String[jArray.length()];
-            for(int i = 0; i < jArray.length(); i++){
-                jObj = jArray.getJSONObject(i);
-                mealID[i] = jObj.getString("idMeal");
+            for (int x = 1; x <= 20; x++) {
+                ingredients.add(jObj.getString("strIngredient" + (x)));
             }
-            System.out.println(Arrays.toString(mealID));
+
+            for (int x = 1; x <= 20; x++) {
+                measures.add(jObj.getString("strMeasure" + (x)));
+            }
+            source = jObj.getString("strSource");
+            imageSource = jObj.getString("strImageSource");
+            creativeCommonsConfirmed = jObj.getString("strCreativeCommonsConfirmed");
+            dateModified = jObj.getString("dateModified");
+            jsonOutputTxt.setText(
+                    "mealName: " + mealName + "\n" +
+                            "Category: " + category +  "\n" +
+                            "area: " + area +  "\n" +
+                            formatIngredients(ingredients.toString()) +  "\n");
+            noOfResultsTxt.setText(indent +1 +"/"+ jArray.length());
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+
+
 
     }
 
@@ -210,14 +221,25 @@ public class SearchAll extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, newURL,
                 response -> {
                     JSONResponse = response;
-                    try {
-                        obj = new JSONObject(response);
-                        System.out.println(obj);
-                        jArray = obj.getJSONArray("meals");
+                    if(!Objects.equals(response, "{\"meals\":null}")){
+                        try {
+                            obj = new JSONObject(response);
+                            System.out.println(obj);
+                            jArray = obj.getJSONArray("meals");
+                            cycle();
 
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
+
+
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+
+
+                    }else{
+                        Toast.makeText(getApplicationContext(), "nothing matching", Toast.LENGTH_LONG).show();//display instructions
+
                     }
+
 
                 }, error -> {
 
@@ -245,6 +267,5 @@ public class SearchAll extends AppCompatActivity {
             return "N/A";
         }
     }
-
 
 }
