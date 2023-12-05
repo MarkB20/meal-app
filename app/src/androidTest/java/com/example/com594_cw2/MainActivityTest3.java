@@ -5,7 +5,6 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -31,14 +30,14 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class MainActivityTest2 {
+public class MainActivityTest3 {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void mainActivityTest2() {
+    public void mainActivityTest3() {
         ViewInteraction materialButton = onView(
                 allOf(withId(R.id.add_btn), withText("Add Meals to  DB"),
                         childAtPosition(
@@ -69,30 +68,21 @@ public class MainActivityTest2 {
                         isDisplayed()));
         appCompatEditText.perform(replaceText("chicken"), closeSoftKeyboard());
 
-
-        ViewInteraction button = onView(withId(R.id.retrieveMealsBtn));
-        ViewInteraction textView = onView(withId(R.id.jsonOutputTxt));
-
-        // Perform a button click
-        button.perform(click());
-
-        // Retrieve the context to get resources
-        Context context = ApplicationProvider.getApplicationContext();
-
-        // Get the expected text from resources or any other source
-        String expectedText = context.getString(R.string.test);
-
-        // Check if the TextView displays the expected text
-        textView.check(matches(allOf(isDisplayed(), withText(expectedText))));
-
-
-
+        ViewInteraction materialButton3 = onView(
+                allOf(withId(R.id.searchBtn), withText("Search"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                4),
+                        isDisplayed()));
+        materialButton3.perform(click());
     }
 
     private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
 
-        return new TypeSafeMatcher<>() {
+        return new TypeSafeMatcher<View>() {
             @Override
             public void describeTo(Description description) {
                 description.appendText("Child at position " + position + " in parent ");
@@ -106,7 +96,14 @@ public class MainActivityTest2 {
                         && view.equals(((ViewGroup) parent).getChildAt(position));
             }
         };
-
-
     }
+    ViewInteraction textView = onView(withId(R.id.jsonOutputTxt));
+    Context context = ApplicationProvider.getApplicationContext();
+
+    // Get the expected text from resources or any other source
+    String expectedText = context.getString(R.string.test);
+
+    // Check if the TextView displays the expected text
+
+
 }

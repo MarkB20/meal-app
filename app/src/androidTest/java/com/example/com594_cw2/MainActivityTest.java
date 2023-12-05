@@ -125,7 +125,7 @@ public class MainActivityTest {
 
         ViewInteraction linearLayout = onView(
                 allOf(withId(androidx.appcompat.R.id.action_bar_root),
-                        withParent(withParent(IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class))),
+                        withParent(withParent(IsInstanceOf.instanceOf(android.widget.LinearLayout.class))),
                         isDisplayed()));
         linearLayout.check(matches(isDisplayed()));
     }
