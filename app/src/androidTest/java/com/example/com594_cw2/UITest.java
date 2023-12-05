@@ -31,6 +31,12 @@ public class UITest {
 
             // Check if the expected activity is launched
             scenario.onActivity(activity -> {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
                 String actualClassName = activity.getClass().getName();
                 assertThat("Unexpected activity launched", actualClassName, equalTo("com.example.com594_cw2.mealByIngredients"));
             });
