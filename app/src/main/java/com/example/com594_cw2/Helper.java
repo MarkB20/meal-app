@@ -1,18 +1,29 @@
 package com.example.com594_cw2;
 
+import android.content.Context;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class JSONHelper {
 
+public class Helper {
+    public interface VolleyCallback {
+        void onSuccess(String result);
 
+        void onError(VolleyError error);
+    }
     public void stringToRoom(String json_string, MealDao mealDao){
 
-
-
+        // initializes the string for denoting what goes into what to grab
         String Meal;
         String DrinkAlternate;
         String Category;
@@ -60,6 +71,7 @@ public class JSONHelper {
 
                 try {
 
+                    //check if its the saved string or the API string
                     if (jObj.has("Meal")) {
                         Meal = "Meal";
                         DrinkAlternate = "DrinkAlternate";
@@ -156,6 +168,41 @@ public class JSONHelper {
         }
 
 
+    }
+
+    public void callVolley(String newURL, Context context, VolleyCallback callback) {
+        RequestQueue queue = Volley.newRequestQueue(context);
+
+        // grabs the request
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, newURL,
+                // Handle the successful response
+                callback::onSuccess,
+                // Handle the error
+                callback::onError);
+
+        queue.add(stringRequest);
+
+    }
+
+     String formatIngredients(String ingredients) {
+        // If the ingredients string is not empty, split it into an array and format each non-empty ingredient on a new line
+        if (ingredients != null && !ingredients.isEmpty()) {
+            // removing the array brackets "[]"
+            String[] ingredientArray = ingredients.substring(1, ingredients.length() - 1).split(", ");
+
+            StringBuilder formattedIngredients = new StringBuilder("Ingredients:\n");
+
+            for (String ingredient : ingredientArray) {
+                // don't add any empty ingredients
+                if (!ingredient.trim().isEmpty() ) {
+                    formattedIngredients.append("- ").append(ingredient.trim()).append("\n");
+                }
+            }
+
+            return formattedIngredients.toString();
+        } else {
+            return "N/A";
+        }
     }
 
 }

@@ -1,10 +1,6 @@
 package com.example.com594_cw2;
 
 
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -14,10 +10,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.VolleyError;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,7 +22,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class mealByIngredients extends AppCompatActivity {
+public class mealByIngredients extends AppCompatActivity implements Helper.VolleyCallback  {
     String mealName = "";
     String drinkAlternate = "";
     String category = "";
@@ -67,7 +63,7 @@ public class mealByIngredients extends AppCompatActivity {
 
     MealDatabase mealDatabase;
     MealDao mealDao;
-    JSONHelper jsoNhelper = new JSONHelper();
+    Helper jsonHelper = new Helper();
     JSONObject obj = null;
     JSONArray jArray = null;
 
@@ -124,8 +120,10 @@ public class mealByIngredients extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Enter something in the text box", Toast.LENGTH_LONG).show();//display instructions
 
                 }else{
+                    // TODO Part 3.5
                     indent = 0;
-                    callVolley(url + ingredientTxt.getText() );
+                    jsonHelper.callVolley(url + ingredientTxt.getText(), this, this);
+//                    callVolley(url + ingredientTxt.getText() );
                 }
             });
 
@@ -133,7 +131,8 @@ public class mealByIngredients extends AppCompatActivity {
                 if(JSONResponse.isEmpty()){
                     Toast.makeText(getApplicationContext(), "retrieve something first", Toast.LENGTH_LONG).show();//display instructions
                 }else{
-                    jsoNhelper.stringToRoom(JSONResponse,mealDao);
+                    // TODO Part 4
+                    jsonHelper.stringToRoom(JSONResponse,mealDao);
 
                 }
             });
@@ -170,16 +169,7 @@ public class mealByIngredients extends AppCompatActivity {
             throw new RuntimeException(e);
         }
 
-
-        if (jArray != null) {
-
-                cycle();
-
-        } else {
-            // Handle the case where one or more arrays are null or empty
-            // You might want to display a message or handle it in a way that makes sense for your app
-        }
-
+        cycle();
 
     }
 
@@ -213,7 +203,7 @@ public class mealByIngredients extends AppCompatActivity {
                     "mealName: " + mealName + "\n" +
                             "Category: " + category +  "\n" +
                             "area: " + area +  "\n" +
-                            formatIngredients(ingredients.toString()) +  "\n");
+                            jsonHelper.formatIngredients(ingredients.toString()) +  "\n");
             noOfResultsTxt.setText(indent +1 +"/"+ jArray.length());
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -223,57 +213,30 @@ public class mealByIngredients extends AppCompatActivity {
 
     }
 
-    public void callVolley(String newURL){
-        RequestQueue queue = Volley.newRequestQueue(this);
-        //creating a string request
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, newURL,
-                response -> {
-                    JSONResponse = response;
-                    if(!Objects.equals(response, "{\"meals\":null}")){
-                        try {
-                            obj = new JSONObject(response);
-                            System.out.println(obj);
-                            jArray = obj.getJSONArray("meals");
-                            cycle();
-
-
-
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
-                        }
-
-
-                    }else{
-                        Toast.makeText(getApplicationContext(), "nothing matching", Toast.LENGTH_LONG).show();//display instructions
-
-                    }
-
-
-                }, error -> {
-
-                });
-        queue.add(stringRequest);
-    }
-
-    private String formatIngredients(String ingredients) {
-        // If the ingredients string is not empty, split it into an array and format each non-empty ingredient on a new line
-        if (ingredients != null && !ingredients.isEmpty()) {
-            // removing the array brackets "[]"
-            String[] ingredientArray = ingredients.substring(1, ingredients.length() - 1).split(", ");
-
-            StringBuilder formattedIngredients = new StringBuilder("Ingredients:\n");
-
-            for (String ingredient : ingredientArray) {
-                // don't add any empty ingredients
-                if (!ingredient.isEmpty()) {
-                    formattedIngredients.append("- ").append(ingredient.trim()).append("\n");
-                }
+    @Override
+    public void onSuccess(String result) {
+        JSONResponse = result;
+        if (!Objects.equals(result, "{\"meals\":null}")) {
+            try {
+                obj = new JSONObject(result);
+                System.out.println(obj);
+                jArray = obj.getJSONArray("meals");
+                cycle();
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
             }
-
-            return formattedIngredients.toString();
         } else {
-            return "N/A";
+            Toast.makeText(getApplicationContext(), "nothing matching", Toast.LENGTH_LONG).show();
         }
     }
 
+    @Override
+    public void onError(VolleyError error) {
+
+    }
+
+
+
+    // ...
 }
+

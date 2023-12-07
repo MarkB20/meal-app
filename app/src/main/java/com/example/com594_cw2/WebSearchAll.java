@@ -1,9 +1,5 @@
 package com.example.com594_cw2;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import androidx.annotation.NonNull;
-
 import android.annotation.SuppressLint;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -13,23 +9,23 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.VolleyError;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Locale;
+import java.util.Objects;
 
 
-public class SearchAll extends AppCompatActivity {
+public class WebSearchAll extends AppCompatActivity implements Helper.VolleyCallback {
 
     String mealName = "";
-    String[] mealID;
     String drinkAlternate = "";
     String category = "";
     String area = "";
@@ -49,14 +45,12 @@ public class SearchAll extends AppCompatActivity {
 
     int indent =0;
     String JSONResponse;
-    private final String urlIngredient = "https://www.themealdb.com/api/json/v1/1/filter.php?i=";
-    private final String urlID =         "https://www.themealdb.com/api/json/v1/1/lookup.php?i=";
+    private final String url = "https://www.themealdb.com/api/json/v1/1/search.php?s=";
 
     EditText ingredientTxt;
 
     Button retrieveMealsBtn;
 
-    Button saveMealsBtn;
 
     ImageButton backBtn;
 
@@ -70,10 +64,9 @@ public class SearchAll extends AppCompatActivity {
 
     MealDatabase mealDatabase;
     MealDao mealDao;
-    JSONHelper jsoNhelper = new JSONHelper();
+    Helper jsonHelper = new Helper();
     JSONObject obj = null;
     JSONArray jArray = null;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +75,7 @@ public class SearchAll extends AppCompatActivity {
 
         mealDatabase = MealDatabase.getMealDatabase(getApplicationContext());
         mealDao = mealDatabase.mealDao();
+
 
         ingredientTxt = findViewById(R.id.ingredientTxt);
         retrieveMealsBtn = findViewById(R.id.retrieveMealsBtn);
@@ -102,7 +96,7 @@ public class SearchAll extends AppCompatActivity {
                 }else{
                     indent--;
                 }
-                getIDs();
+                cycle();
             }
         });
 
@@ -116,7 +110,7 @@ public class SearchAll extends AppCompatActivity {
                 }else{
                     indent ++;
                 }
-                getIDs();
+                cycle();
             }
         });
 
@@ -127,25 +121,21 @@ public class SearchAll extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Enter something in the text box", Toast.LENGTH_LONG).show();//display instructions
 
             }else{
+
                 indent = 0;
-                callVolley(urlIngredient + ingredientTxt.getText() );
-                getIDs();
-
-                for(String meal: mealID){
-
-                    callVolley(urlID + meal);
-                }
-
-
+                // lowercase so not to trigger any Case sensitive conflicts
+                // TODO Part 8
+                String tempIngredient = ingredientTxt.getText().toString().toLowerCase(Locale.ROOT);
+                jsonHelper.callVolley(url + tempIngredient, this, this);
+//
             }
         });
 
-
     }
 
+    // on rotate ensure that the orientation is properly updated
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        // Handle configuration changes, if needed
     }
 
 
@@ -166,7 +156,9 @@ public class SearchAll extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+        // grabs the two things needed which is the indent for what part of the cycle it is
         indent = savedInstanceState.getInt("indent", 0);
+        // the jArray is stored for cycling
         String jsonArray = savedInstanceState.getString("jArray");
         try {
             jArray = new JSONArray(jsonArray);
@@ -174,77 +166,74 @@ public class SearchAll extends AppCompatActivity {
             throw new RuntimeException(e);
         }
 
-
-        if (jArray != null) {
-
-            getIDs();
-
-        } else {
-            // Handle the case where one or more arrays are null or empty
-            // You might want to display a message or handle it in a way that makes sense for your app
-        }
-
+        cycle();
 
     }
 
     @SuppressLint("SetTextI18n")
-    public void getIDs(){
+    public void cycle(){
         JSONObject jObj;
         try {
+            ingredients.clear();
+            measures.clear();
+            jObj = jArray.getJSONObject(indent);
+            mealName = jObj.getString("strMeal");
+            drinkAlternate = jObj.getString("strDrinkAlternate");
+            category = jObj.getString("strCategory");
+            area = jObj.getString("strArea");
+            mealThumb = jObj.getString("strMealThumb");
+            tag = jObj.getString("strTags");
+            youtube = jObj.getString("strYoutube");
 
-            mealID = new String[jArray.length()];
-            for(int i = 0; i < jArray.length(); i++){
-                jObj = jArray.getJSONObject(i);
-                mealID[i] = jObj.getString("idMeal");
+            for (int x = 1; x <= 20; x++) {
+                ingredients.add(jObj.getString("strIngredient" + (x)));
             }
-            System.out.println(Arrays.toString(mealID));
+
+            for (int x = 1; x <= 20; x++) {
+                measures.add(jObj.getString("strMeasure" + (x)));
+            }
+            source = jObj.getString("strSource");
+            imageSource = jObj.getString("strImageSource");
+            creativeCommonsConfirmed = jObj.getString("strCreativeCommonsConfirmed");
+            dateModified = jObj.getString("dateModified");
+            jsonOutputTxt.setText(
+                    "mealName: " + mealName + "\n" +
+                            "Category: " + category +  "\n" +
+                            "area: " + area +  "\n" +
+                            jsonHelper.formatIngredients(ingredients.toString()) +  "\n");
+            noOfResultsTxt.setText(indent +1 +"/"+ jArray.length());
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
 
+
+
     }
 
-    public void callVolley(String newURL){
-        RequestQueue queue = Volley.newRequestQueue(this);
-        //creating a string request
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, newURL,
-                response -> {
-                    JSONResponse = response;
-                    try {
-                        obj = new JSONObject(response);
-                        System.out.println(obj);
-                        jArray = obj.getJSONArray("meals");
-
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    }
-
-                }, error -> {
-
-        });
-        queue.add(stringRequest);
-    }
-
-    private String formatIngredients(String ingredients) {
-        // If the ingredients string is not empty, split it into an array and format each non-empty ingredient on a new line
-        if (ingredients != null && !ingredients.isEmpty()) {
-            // removing the array brackets "[]"
-            String[] ingredientArray = ingredients.substring(1, ingredients.length() - 1).split(", ");
-
-            StringBuilder formattedIngredients = new StringBuilder("Ingredients:\n");
-
-            for (String ingredient : ingredientArray) {
-                // don't add any empty ingredients
-                if (!ingredient.isEmpty()) {
-                    formattedIngredients.append("- ").append(ingredient.trim()).append("\n");
-                }
+    @Override
+    public void onSuccess(String result) {
+        JSONResponse = result;
+        if (!Objects.equals(result, "{\"meals\":null}")) {
+            try {
+                obj = new JSONObject(result);
+                System.out.println(obj);
+                jArray = obj.getJSONArray("meals");
+                cycle();
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
             }
-
-            return formattedIngredients.toString();
         } else {
-            return "N/A";
+            Toast.makeText(getApplicationContext(), "nothing matching", Toast.LENGTH_LONG).show();
         }
     }
 
+    @Override
+    public void onError(VolleyError error) {
 
+    }
+
+
+
+    // ...
 }
+

@@ -37,6 +37,7 @@ public class SearchMeals extends AppCompatActivity {
     String[] ingredientTxt;
     String[] URLTxt;
 
+    Helper helper = new Helper();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,14 +130,14 @@ public class SearchMeals extends AppCompatActivity {
 
     }
 
+    // TODO Part 7
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        // Handle configuration changes, if needed
     }
 
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("indent", indent);
         outState.putStringArray("mealTxt",  mealTxt);
@@ -160,9 +161,6 @@ public class SearchMeals extends AppCompatActivity {
             if (!mealTxt[indent].isEmpty()) {
                 cycle();
             }
-        } else {
-            // Handle the case where one or more arrays are null or empty
-            // You might want to display a message or handle it in a way that makes sense for your app
         }
 
 
@@ -178,7 +176,7 @@ public class SearchMeals extends AppCompatActivity {
     private void cycle() {
 
         runOnUiThread(() -> {
-            mealOutputTxt = "Meal: " + mealTxt[indent] + "\n" + formatIngredients(ingredientTxt[indent]);
+            mealOutputTxt = "Meal: " + mealTxt[indent] + "\n" + helper.formatIngredients(ingredientTxt[indent]);
             System.out.println(mealOutputTxt);
             mealOutput.setText(mealOutputTxt);
 
@@ -186,6 +184,7 @@ public class SearchMeals extends AppCompatActivity {
                 try {
 
                     System.out.println("URL: " + new URL(URLTxt[indent]));
+                    // TODO Part 6
                     bitmap = BitmapFactory.decodeStream((InputStream) new URL(URLTxt[indent]).getContent());
                     mealImg.setImageBitmap(bitmap);
 
@@ -200,29 +199,6 @@ public class SearchMeals extends AppCompatActivity {
         noOfResultsTxt.setText(fullCounter);
 
     }
-    private String formatIngredients(String ingredients) {
-        // If the ingredients string is not empty, split it into an array and format each non-empty ingredient on a new line
-        if (ingredients != null && !ingredients.isEmpty()) {
-            // removing the array brackets "[]"
-            String[] ingredientArray = ingredients.substring(1, ingredients.length() - 1).split(", ");
-
-            StringBuilder formattedIngredients = new StringBuilder("Ingredients:\n");
-
-            for (String ingredient : ingredientArray) {
-                // don't add any empty ingredients
-                if (!ingredient.trim().isEmpty()) {
-                    formattedIngredients.append("- ").append(ingredient.trim()).append("\n");
-                }
-            }
-
-            return formattedIngredients.toString();
-        } else {
-            return "N/A";
-        }
-    }
-
-
-
 
 
 }
