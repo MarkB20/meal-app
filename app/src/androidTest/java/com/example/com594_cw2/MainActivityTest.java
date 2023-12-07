@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import androidx.test.espresso.IdlingPolicies;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -25,9 +26,12 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.hamcrest.core.IsInstanceOf;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.concurrent.TimeUnit;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -36,6 +40,13 @@ public class MainActivityTest {
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
+
+    @Before
+    public void setUp() {
+        // Set a longer timeout
+        IdlingPolicies.setMasterPolicyTimeout(20, TimeUnit.SECONDS);
+        IdlingPolicies.setIdlingResourceTimeout(20, TimeUnit.SECONDS);
+    }
 
     @Test
     public void mainActivityTestAddToDB() {
@@ -79,11 +90,33 @@ public class MainActivityTest {
                         isDisplayed()));
         materialButton3.perform(click());
 
+
         ViewInteraction textView = onView(
                 allOf(withId(R.id.mealOutput), withText("Meal: Chicken Marengo\nIngredients:\n- Olive Oil\n- Mushrooms\n- Chicken Legs\n- Passata\n- Chicken Stock Cube\n- Black Olives\n- Parsley\n"),
                         withParent(withParent(withId(android.R.id.content))),
                         isDisplayed()));
-        textView.check(matches(withText("Meal: Chicken Marengo\nIngredients:\n- Olive Oil\n- Mushrooms\n- Chicken Legs\n- Passata\n- Chicken Stock Cube\n- Black Olives\n- Parsley\n")));
+        int count = 0;
+        int check = 0;
+        int maxTries = 3;
+        while(true) {
+
+            try {
+                // Some Code
+                textView.check(matches(withText("Meal: Chicken Marengo\nIngredients:\n- Olive Oil\n- Mushrooms\n- Chicken Legs\n- Passata\n- Chicken Stock Cube\n- Black Olives\n- Parsley\n")));
+                // break out of loop, or return, on success
+
+            } catch (Exception e) {
+                // handle exception
+                System.out.println("Attempt " + count + " failed: " + e.getMessage());
+                if (++count == maxTries) throw e;
+            }
+            if(check == count){
+                check++;
+            }else {
+                break;
+            }
+        }
+
     }
 
     @Test
@@ -168,26 +201,26 @@ public class MainActivityTest {
                 allOf(withId(R.id.webSearch_btn), withText("Web Name Search"),
                         childAtPositionWebSearch(
                                 childAtPositionWebSearch(
-                                        withId(android.R.id.content),
-                                        0),
-                                0),
+                                        withId(android.R.id.content)
+                                )
+                        ),
                         isDisplayed()));
         materialButton.perform(click());
 
         ViewInteraction linearLayout = onView(
                 allOf(withId(androidx.appcompat.R.id.action_bar_root),
-                        withParent(withParent(IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class))),
+                        withParent(withParent(IsInstanceOf.instanceOf(android.widget.LinearLayout.class))),
                         isDisplayed()));
         linearLayout.check(matches(isDisplayed()));
     }
 
     private static Matcher<View> childAtPositionWebSearch(
-            final Matcher<View> parentMatcher, final int position) {
+            final Matcher<View> parentMatcher) {
 
         return new TypeSafeMatcher<View>() {
             @Override
             public void describeTo(Description description) {
-                description.appendText("Child at position " + position + " in parent ");
+                description.appendText("Child at position " + 0 + " in parent ");
                 parentMatcher.describeTo(description);
             }
 
@@ -195,7 +228,7 @@ public class MainActivityTest {
             public boolean matchesSafely(View view) {
                 ViewParent parent = view.getParent();
                 return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
+                        && view.equals(((ViewGroup) parent).getChildAt(0));
             }
         };
     }

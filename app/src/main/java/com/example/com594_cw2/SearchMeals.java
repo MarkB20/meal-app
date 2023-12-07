@@ -136,7 +136,7 @@ public class SearchMeals extends AppCompatActivity {
 
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("indent", indent);
         outState.putStringArray("mealTxt",  mealTxt);
@@ -160,9 +160,6 @@ public class SearchMeals extends AppCompatActivity {
             if (!mealTxt[indent].isEmpty()) {
                 cycle();
             }
-        } else {
-            // Handle the case where one or more arrays are null or empty
-            // You might want to display a message or handle it in a way that makes sense for your app
         }
 
 

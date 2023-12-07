@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
     MealDatabase mealDatabase;
     MealDao mealDao;
-    JSONHelper jsoNhelper = new JSONHelper();
+    Helper jsonHelper = new Helper();
 
 
     Button mealIngredient;
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-       System.out.println(jsoNhelper.callVolley("https://www.themealdb.com/api/json/v1/1/search.php?s=chicken", getApplicationContext()));
+
 
     }
 
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     public void storeData(View view){
 
         //sends the string to be conversed into a json object so be stored in a database
-        jsoNhelper.stringToRoom(getResources().getString(R.string.json1), mealDao);
+        jsonHelper.stringToRoom(getResources().getString(R.string.json1), mealDao);
 
 
     }

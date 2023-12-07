@@ -1,10 +1,10 @@
 package com.example.com594_cw2;
 
 import android.content.Context;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -13,11 +13,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Objects;
-
-public class JSONHelper {
 
 
+public class Helper {
+    public interface VolleyCallback {
+        void onSuccess(String result);
+
+        void onError(VolleyError error);
+    }
     public void stringToRoom(String json_string, MealDao mealDao){
 
 
@@ -167,18 +170,41 @@ public class JSONHelper {
 
     }
 
-    public String callVolley(String newURL,  Context context){
-
+    public void callVolley(String newURL, Context context, VolleyCallback callback) {
         RequestQueue queue = Volley.newRequestQueue(context);
-        //creating a string request
+
+
+
         StringRequest stringRequest = new StringRequest(Request.Method.GET, newURL,
-                response -> {
+                // Handle the successful response
 
-                }, error -> {
+                callback::onSuccess,
+                // Handle the error
+                callback::onError);
 
-        });
         queue.add(stringRequest);
-       return  stringRequest.toString();
+
+    }
+
+     String formatIngredients(String ingredients) {
+        // If the ingredients string is not empty, split it into an array and format each non-empty ingredient on a new line
+        if (ingredients != null && !ingredients.isEmpty()) {
+            // removing the array brackets "[]"
+            String[] ingredientArray = ingredients.substring(1, ingredients.length() - 1).split(", ");
+
+            StringBuilder formattedIngredients = new StringBuilder("Ingredients:\n");
+
+            for (String ingredient : ingredientArray) {
+                // don't add any empty ingredients
+                if (!ingredient.trim().isEmpty() ) {
+                    formattedIngredients.append("- ").append(ingredient.trim()).append("\n");
+                }
+            }
+
+            return formattedIngredients.toString();
+        } else {
+            return "N/A";
+        }
     }
 
 }
