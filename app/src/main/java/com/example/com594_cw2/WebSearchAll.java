@@ -19,10 +19,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Objects;
 
 
-public class SearchAll extends AppCompatActivity implements Helper.VolleyCallback {
+public class WebSearchAll extends AppCompatActivity implements Helper.VolleyCallback {
 
     String mealName = "";
     String drinkAlternate = "";
@@ -120,8 +121,12 @@ public class SearchAll extends AppCompatActivity implements Helper.VolleyCallbac
                 Toast.makeText(getApplicationContext(), "Enter something in the text box", Toast.LENGTH_LONG).show();//display instructions
 
             }else{
+
                 indent = 0;
-                jsonHelper.callVolley(url + ingredientTxt.getText(), this, this);
+                // lowercase so not to trigger any Case sensitive conflicts
+                // TODO Part 8
+                String tempIngredient = ingredientTxt.getText().toString().toLowerCase(Locale.ROOT);
+                jsonHelper.callVolley(url + tempIngredient, this, this);
 //
             }
         });
@@ -131,7 +136,6 @@ public class SearchAll extends AppCompatActivity implements Helper.VolleyCallbac
     // on rotate ensure that the orientation is properly updated
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        // Handle configuration changes, if needed
     }
 
 

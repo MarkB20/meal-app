@@ -120,6 +120,7 @@ public class mealByIngredients extends AppCompatActivity implements Helper.Volle
                     Toast.makeText(getApplicationContext(), "Enter something in the text box", Toast.LENGTH_LONG).show();//display instructions
 
                 }else{
+                    // TODO Part 3.5
                     indent = 0;
                     jsonHelper.callVolley(url + ingredientTxt.getText(), this, this);
 //                    callVolley(url + ingredientTxt.getText() );
@@ -130,6 +131,7 @@ public class mealByIngredients extends AppCompatActivity implements Helper.Volle
                 if(JSONResponse.isEmpty()){
                     Toast.makeText(getApplicationContext(), "retrieve something first", Toast.LENGTH_LONG).show();//display instructions
                 }else{
+                    // TODO Part 4
                     jsonHelper.stringToRoom(JSONResponse,mealDao);
 
                 }

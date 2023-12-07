@@ -48,6 +48,7 @@ public class MainActivityTest {
         IdlingPolicies.setIdlingResourceTimeout(20, TimeUnit.SECONDS);
     }
 
+    // TODO Part test 1
     @Test
     public void mainActivityTestAddToDB() {
         ViewInteraction materialButton = onView(

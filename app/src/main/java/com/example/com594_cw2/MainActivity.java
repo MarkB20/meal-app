@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
         webSearch = findViewById(R.id.webSearch_btn);
 
 
+        // TODO Part 3
+        //sends
         mealIngredient.setOnClickListener(view -> {
             Intent intent = new Intent(getBaseContext(), mealByIngredients.class);
             Log.d("MainActivity", "Button clicked, starting mealByIngredients activity");
@@ -45,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
+        // TODO Part 5
         mealDB.setOnClickListener(view -> {
             Intent intent = new Intent(getBaseContext(), SearchMeals.class);
 
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         webSearch.setOnClickListener(view -> {
-            Intent intent = new Intent(getBaseContext(), SearchAll.class);
+            Intent intent = new Intent(getBaseContext(), WebSearchAll.class);
 
             startActivity(intent);
 
@@ -70,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    // TODO Part 1 and 2
     public void storeData(View view){
 
         //sends the string to be conversed into a json object so be stored in a database

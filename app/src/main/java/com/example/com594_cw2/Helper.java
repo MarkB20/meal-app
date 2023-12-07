@@ -23,8 +23,7 @@ public class Helper {
     }
     public void stringToRoom(String json_string, MealDao mealDao){
 
-
-
+        // initializes the string for denoting what goes into what to grab
         String Meal;
         String DrinkAlternate;
         String Category;
@@ -72,6 +71,7 @@ public class Helper {
 
                 try {
 
+                    //check if its the saved string or the API string
                     if (jObj.has("Meal")) {
                         Meal = "Meal";
                         DrinkAlternate = "DrinkAlternate";
@@ -173,11 +173,9 @@ public class Helper {
     public void callVolley(String newURL, Context context, VolleyCallback callback) {
         RequestQueue queue = Volley.newRequestQueue(context);
 
-
-
+        // grabs the request
         StringRequest stringRequest = new StringRequest(Request.Method.GET, newURL,
                 // Handle the successful response
-
                 callback::onSuccess,
                 // Handle the error
                 callback::onError);

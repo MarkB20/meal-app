@@ -41,6 +41,7 @@ public class InternetConnectionTest  implements Helper.VolleyCallback  {
         assertTrue(isNetworkAvailable(context));
     }
 
+    // TODO Part test 2
     private boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -68,7 +69,7 @@ public class InternetConnectionTest  implements Helper.VolleyCallback  {
         // Wait for the callback to be invoked
         latch.await();
 
-        // Now, you can make assertions
+        // asserts that connects and right result
         assertTrue(rightResult);
     }
 
