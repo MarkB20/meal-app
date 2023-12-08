@@ -102,7 +102,6 @@ public class MainActivityTest {
         while(true) {
 
             try {
-                // Some Code
                 textView.check(matches(withText("Meal: Chicken Marengo\nIngredients:\n- Olive Oil\n- Mushrooms\n- Chicken Legs\n- Passata\n- Chicken Stock Cube\n- Black Olives\n- Parsley\n")));
                 // break out of loop, or return, on success
 
@@ -142,7 +141,7 @@ public class MainActivityTest {
     private static Matcher<View> childAtPositionSearchIngredient(
             final Matcher<View> parentMatcher, final int position) {
 
-        return new TypeSafeMatcher<View>() {
+        return new TypeSafeMatcher<>() {
             @Override
             public void describeTo(Description description) {
                 description.appendText("Child at position " + position + " in parent ");
@@ -180,7 +179,7 @@ public class MainActivityTest {
     private static Matcher<View> childAtPositionSearch(
             final Matcher<View> parentMatcher, final int position) {
 
-        return new TypeSafeMatcher<View>() {
+        return new TypeSafeMatcher<>() {
             @Override
             public void describeTo(Description description) {
                 description.appendText("Child at position " + position + " in parent ");
@@ -218,7 +217,7 @@ public class MainActivityTest {
     private static Matcher<View> childAtPositionWebSearch(
             final Matcher<View> parentMatcher) {
 
-        return new TypeSafeMatcher<View>() {
+        return new TypeSafeMatcher<>() {
             @Override
             public void describeTo(Description description) {
                 description.appendText("Child at position " + 0 + " in parent ");
@@ -237,7 +236,7 @@ public class MainActivityTest {
     private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
 
-        return new TypeSafeMatcher<View>() {
+        return new TypeSafeMatcher<>() {
             @Override
             public void describeTo(Description description) {
                 description.appendText("Child at position " + position + " in parent ");

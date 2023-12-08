@@ -85,7 +85,7 @@ public class WebSearchAll extends AppCompatActivity implements Helper.VolleyCall
         noOfResultsTxt = findViewById(R.id.noOfResultsTxt);
 
 
-
+        // go back or forward
         backBtn.setOnClickListener(view -> {
             if(jArray == null){
                 Toast.makeText(getApplicationContext(), "retrieve something first", Toast.LENGTH_LONG).show();//display instructions
@@ -205,11 +205,9 @@ public class WebSearchAll extends AppCompatActivity implements Helper.VolleyCall
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-
-
-
     }
 
+    // if there is a success in the retrieval from the api, save it
     @Override
     public void onSuccess(String result) {
         JSONResponse = result;
@@ -229,11 +227,11 @@ public class WebSearchAll extends AppCompatActivity implements Helper.VolleyCall
 
     @Override
     public void onError(VolleyError error) {
-
+        System.out.println("connection error : " + error);
     }
 
 
 
-    // ...
+
 }
 

@@ -123,7 +123,6 @@ public class mealByIngredients extends AppCompatActivity implements Helper.Volle
                     // TODO Part 3.5
                     indent = 0;
                     jsonHelper.callVolley(url + ingredientTxt.getText(), this, this);
-//                    callVolley(url + ingredientTxt.getText() );
                 }
             });
 
@@ -213,6 +212,7 @@ public class mealByIngredients extends AppCompatActivity implements Helper.Volle
 
     }
 
+    // on API call calls onSuccess or error depending to connection
     @Override
     public void onSuccess(String result) {
         JSONResponse = result;
@@ -232,11 +232,7 @@ public class mealByIngredients extends AppCompatActivity implements Helper.Volle
 
     @Override
     public void onError(VolleyError error) {
-
+        System.out.println("mealByIngredients error: "+error);
     }
-
-
-
-    // ...
 }
 
