@@ -199,7 +199,7 @@ public class mealByIngredients extends AppCompatActivity implements Helper.Volle
             creativeCommonsConfirmed = jObj.getString("strCreativeCommonsConfirmed");
             dateModified = jObj.getString("dateModified");
             jsonOutputTxt.setText(
-                    "mealName: " + mealName + "\n" +
+                    "meal Name: " + mealName + "\n" +
                             "Category: " + category +  "\n" +
                             "area: " + area +  "\n" +
                             jsonHelper.formatIngredients(ingredients.toString()) +  "\n");
