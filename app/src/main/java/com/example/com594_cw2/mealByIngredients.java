@@ -85,10 +85,12 @@ public class mealByIngredients extends AppCompatActivity implements Helper.Volle
 
 
 
+        // go back or forward
             backBtn.setOnClickListener(view -> {
                 if(jArray == null){
                     Toast.makeText(getApplicationContext(), "retrieve something first", Toast.LENGTH_LONG).show();//display instructions
                 }else{
+                    // check if at the start and go to the end if true
                     if(indent == 0){
                         indent = jArray.length() - 1;
 
@@ -103,6 +105,7 @@ public class mealByIngredients extends AppCompatActivity implements Helper.Volle
                 if(jArray == null){
                     Toast.makeText(getApplicationContext(), "retrieve something first", Toast.LENGTH_LONG).show();//display instructions
                 }else{
+                    // check if at the end and go to the start if true
                     if(indent == jArray.length() -1){
                         indent = 0;
 
@@ -123,7 +126,6 @@ public class mealByIngredients extends AppCompatActivity implements Helper.Volle
                     // TODO Part 3.5
                     indent = 0;
                     jsonHelper.callVolley(url + ingredientTxt.getText(), this, this);
-//                    callVolley(url + ingredientTxt.getText() );
                 }
             });
 
@@ -173,6 +175,7 @@ public class mealByIngredients extends AppCompatActivity implements Helper.Volle
 
     }
 
+    // goes through and reads and shows each meal individually depending on the indent
     @SuppressLint("SetTextI18n")
     public void cycle(){
         JSONObject jObj;
@@ -213,9 +216,11 @@ public class mealByIngredients extends AppCompatActivity implements Helper.Volle
 
     }
 
+    // if there is a success in the retrieval from the api, save it
     @Override
     public void onSuccess(String result) {
         JSONResponse = result;
+        // checks if the input returned a null
         if (!Objects.equals(result, "{\"meals\":null}")) {
             try {
                 obj = new JSONObject(result);
@@ -232,11 +237,11 @@ public class mealByIngredients extends AppCompatActivity implements Helper.Volle
 
     @Override
     public void onError(VolleyError error) {
-
+        System.out.println("connection error : " + error);
     }
 
 
 
-    // ...
+
 }
 
